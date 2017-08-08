@@ -1,15 +1,10 @@
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
-import random
-import datetime
+import csv
 
-random.seed(datetime.datetime.now())
-
-def getLinks(urltail):
-    url = 'https://www.marxists.org/chinese/maozedong/' + urltail
-    html = urlopen(url)
-    bs = BeautifulSoup(html, 'html.parser')
-    return bs.find_all('a')
-
-links = getLinks('index.htm#0')
-print('haha')
+csvFile = open("test.csv", 'w')
+try:
+    writer = csv.writer(csvFile)
+    writer.writerow(('number', 'number plus 2', 'number times 2'))
+    for i in range(10):
+        writer.writerow((i, i+2, i*2))
+finally:
+    csvFile.close()
