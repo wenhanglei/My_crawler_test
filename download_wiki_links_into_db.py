@@ -5,7 +5,7 @@ import datetime
 import random
 import pymysql
 
-conn = pymysql.connect(host='localhost', user='root', passwd='712342', charset='utf8')
+conn = pymysql.connect(host='localhost', user='root', passwd='****', charset='utf8')
 
 cur = conn.cursor()
 cur.execute("use scraping")
