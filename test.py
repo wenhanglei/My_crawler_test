@@ -1,5 +1,20 @@
 import requests
 
+def fun1():
+    try:
+        print('I am your father.')
+        assert False, '出错了'
+    except:
+        print('错误执行完毕！')
+    print('执行我。')
+
+def fun():
+    fun1()
+    print('hahah')
+
+if __name__ == '__main__':
+    fun()
+
 #def download(url):
 #    return requests.get(url).content
 #

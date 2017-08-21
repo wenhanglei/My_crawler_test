@@ -6,28 +6,27 @@ import pickle
 import shutil
 import os
 
-
-#获得图片连接
-file = open('sanbay.pkl', 'rb')
-links = pickle.load(file)
-
-def save_img(url, dirname = '.'):
-    "保存图片文件"
-    #获取文件名
-    filename = os.path.basename(url)
-    #生成文件路径
-    filepath = os.path.join(dirname, filename)
-    #拿到响应图片流
-    response = requests.get(url, stream=True)
-    #保存图片到指定文件夹
-    if not os.path.exists(filepath):
-        with open(filepath, 'wb') as f:
-            shutil.copyfileobj(response.raw, f)
-        del response
-
-#保存图片
-for link in links:
-    save_img(link)
+# #获得图片连接
+# file = open('sanbay.pkl', 'rb')
+# links = pickle.load(file)
+#
+# def save_img(url, dirname = '.'):
+#     "保存图片文件"
+#     #获取文件名
+#     filename = os.path.basename(url)
+#     #生成文件路径
+#     filepath = os.path.join(dirname, filename)
+#     #拿到响应图片流
+#     response = requests.get(url, stream=True)
+#     #保存图片到指定文件夹
+#     if not os.path.exists(filepath):
+#         with open(filepath, 'wb') as f:
+#             shutil.copyfileobj(response.raw, f)
+#         del response
+#
+# #保存图片
+# for link in links:
+#     save_img(link)
 
 
 # response = requests.get(url, stream=True)

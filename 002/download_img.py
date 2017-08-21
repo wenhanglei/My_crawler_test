@@ -60,6 +60,16 @@ def save_img(url, dirpath = '.'):
     "保存图片文件"
     #获取文件名
     filename = os.path.basename(url)
+    #如果需要保存的文件夹不存在
+    if not os.path.exists(dirpath):
+        #创建文件夹
+        try:
+            os.mkdir(dirpath)
+        except:
+            try:
+                os.makedirs(dirpath)
+            except Exception as e:
+                raise e
     #生成文件路径
     filepath = os.path.join(dirpath, filename)
     try:
@@ -70,6 +80,7 @@ def save_img(url, dirpath = '.'):
         1/0
     else:
         #保存图片到指定文件夹
+        #如果需要保存的文件不存在
         if not os.path.exists(filepath):
             with open(filepath, 'wb') as f:
                 shutil.copyfileobj(response.raw, f)
@@ -86,5 +97,7 @@ def download_imgs(url, dirpath = '.'):
 if __name__ == '__main__':
     # 指定需要爬取的url
     url = 'http://www.shanbay.com/web/account/login'
+    #指定需要保存的文件夹
+    dirname = 'img'
     #下载所有图片
-    download_imgs(url)
+    download_imgs(url, dirname)
