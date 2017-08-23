@@ -1,14 +1,45 @@
-# cookies = 'll="108309"; bid=6xdC2d2XN9I; gr_user_id=1cd088c8-2b69-416b-8064-7a5d71ffd334; UM_distinctid=15d8c583862613-04a2e2ffb8da45-333f5902-100200-15d8c58386c28de; viewed="26740503_25814739_26274202_26869212_26999123_26869992_3082278_21792530_1231579_2228378"; _vwo_uuid_v2=9DDAA51B1AA3BA46F3B461EA4110B63D|a592eab55e5c3ca5f5b9608200c1ff64; ps=y; push_noty_num=0; push_doumail_num=0; ap=1; __utma=30149280.729731874.1498746693.1503371976.1503386476.9; __utmc=30149280; __utmz=30149280.1503386476.9.7.utmcsr=accounts.douban.com|utmccn=(referral)|utmcmd=referral|utmcct=/login; __utmv=30149280.13248; _ga=GA1.2.729731874.1498746693; _gid=GA1.2.1142111036.1503371979; ue="3188744608@qq.com"; dbcl2="132482335:GLv31nzKCf0"; ck=o-5E'
-def change_cookies(cookiestr):
-    li = cookiestr.split(';')
+import requests
+
+url = "https://www.douban.com/people/132482335/"
+cookie_file = 'cookie.txt'
+header_file = 'request_headers.txt'
+
+#从txt文件加载cooki字典
+def get_cookie_dic(filename):
     cookies = {}
-    for i in li:
-        item = i.split("=")
-        if item[1].startswith('"'):
-            cookies[item[0]] = item[1][1:-2]
-            # print('%s=%s' % (item[0], item[1][1:-1]))
-        else:
-            cookies[item[0]] = item[1]
-            # print('%s=%s' % (item[0], item[1]))
+    with open(filename) as file:
+        cookie_text = file.read()
+        ck_li = cookie_text.split(';')
+        for li in ck_li:
+            key, value = tuple(li.split('=', maxsplit=1))
+            cookies[key] = value
     return cookies
+#从txt文件加载header字典
+def load_header_dic(filename):
+    headers = {}
+    with open(filename) as file:
+        for line in file:
+            key, value = line.rstrip().split(':', maxsplit=1)
+            headers[key] = value
+    return headers
+
+if __name__ == '__main__':
+    #测试加载的cookie和header
+    # for key, value in get_cookie_dic(cookie_file).items():
+    #     print('%s : %s' % (key, value))
+    #测试加载的header
+    # for key, value in load_header_dic(header_file).items():
+    #     print('%s : %s' % (key, value))
+    #加载header
+    headers = load_header_dic(header_file)
+    # #加载cookies
+    cookie = get_cookie_dic(cookie_file)
+    # 请求登录后的豆瓣主页
+    with requests.Session() as s:
+        s.headers = headers
+        resp = s.get(url, cookies=cookie)
+        #设置响应编码
+        resp.encoding = "utf-8"
+        with open('douban.html', 'w', encoding='utf-8') as file:
+            file.write(resp.text)
 
