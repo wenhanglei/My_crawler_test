@@ -28,10 +28,11 @@ if __name__ == '__main__':
         #设置resp的编码格式为utf8
         resp.encoding = 'utf-8'
         #创建用于匹配图片的正则表达式
-        pattern = re.compile(r'<img class=.*?>')
-        m = pattern.search(resp.text)
-        if m != None:
-            print(m.group())
+        pattern = re.compile(r'<img.*?>')
+        img_list = pattern.findall(resp.text)
+        if img_list != []:
+            for img in img_list:
+                print(img)
         else:
             print('没有获取到！')
         # #构建BeautifulSoup对象
