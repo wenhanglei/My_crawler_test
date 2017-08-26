@@ -1,6 +1,6 @@
 import requests
 
-url = "https://www.douban.com/people/132482335/"
+url = "http://www.toutiao.com/c/user/4488814447/"
 cookie_file = 'cookie.txt'
 header_file = 'request_headers.txt'
 
@@ -34,12 +34,12 @@ if __name__ == '__main__':
     headers = load_header_dic(header_file)
     # #加载cookies
     cookie = get_cookie_dic(cookie_file)
-    # 请求登录后的豆瓣主页
+    # 请求登录后网页
     with requests.Session() as s:
         s.headers = headers
         resp = s.get(url, cookies=cookie)
         #设置响应编码
-        resp.encoding = "utf-8"
-        with open('douban.html', 'w', encoding='utf-8') as file:
+        resp.encoding = resp.apparent_encoding
+        with open('page.html', 'w', encoding='utf-8') as file:
             file.write(resp.text)
 
