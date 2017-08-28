@@ -17,12 +17,15 @@ def download_data(bsobj, container):
     for div in sub_divs:
         # 初始化数据容器
         data = Data()
-        # 获取标题和连接
-        data.title = div.h2.a.string
-        data.link = 'https://www.zhihu.com' + div.h2.a['href']
-        # 获取赞数和作者
-        data.votes = div.find('div', class_='zm-item-vote').a.string
-        data.author = div.find('span', class_='author-link-line').a.string
+        try:
+            # 获取标题和连接
+            data.title = div.h2.a.string
+            data.link = 'https://www.zhihu.com' + div.h2.a['href']
+            # 获取赞数和作者
+            data.votes = div.find('div', class_='zm-item-vote').a.string
+            data.author = div.find('span', class_='author-link-line').a.string
+        except:
+            print('something is wrong')
         # 保存数据
         if flag == 1:
             print('保存： ' + data.title)
@@ -73,11 +76,18 @@ if __name__ == '__main__':
     # 定义用于保存数据的list
     contents = []
 
+    #访问并提取数据
     visite_next_link(url, contents)
 
-    #保存获取的数据
+    #保存数据
     with open('answer_links.pkl', 'wb') as file:
         pickle.dump(contents, file)
+
+
+
+
+
+
 
 
 #############测试是否可以不用header和cookies直接访问
