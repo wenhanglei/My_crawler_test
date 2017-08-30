@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# import requests
-# from bs4 import BeautifulSoup
-# import urllib.parse
-# import re
+import requests
+from bs4 import BeautifulSoup
+import urllib.parse
+import re
 
 url = 'http://hanyu.baidu.com/'
 h_file = 'header.txt'
@@ -42,14 +42,21 @@ def load_obj(fname):
     with open(fname, 'rb') as file:
         return pickle.load(file)
 
-text = '中文'
-print(ord('中').to_bytes(2,'big'))
-print(ord('文').to_bytes(2,'big'))
+def query_word(string):
+    string = 'http://hanyu.baidu.com/s?wd=%s&from=poem' % string
+    urlcode = urllib.parse.quote(string, safe='?:/&=', encoding='utf-8')
+    return urlcode
 
-print(text.encode('utf-8'))
-for b in text.encode('utf-8'):
-    print(bin(b), end=' ')
-print()
-for b in text.encode('utf-8'):
-    print((b), end=' ')
+def get_pronounce(word):
+    header = load_header(h_file)
+    query_url = query_word(word)
+    resp = requests.get(query_url, headers=header)
+    resp.encoding = 'utf-8'
+    bsobj = BeautifulSoup(resp.text, 'html.parser')
+    div = bsobj.find('div', class_='pronounce')
+    pron = div.span.b.string
+    return pron
 
+if __name__ == '__main__':
+    pron = get_pronounce('谶')
+    print(pron)
