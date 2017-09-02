@@ -4,23 +4,15 @@ import requests
 from bs4 import BeautifulSoup
 import urllib.parse
 import re
+import util
 
 url = 'http://hanyu.baidu.com/'
 h_file = 'header.txt'
 
-#通过header.txt载入用于设置request的header
-def load_header(filename):
-    header = {}
-    with open(filename) as file:
-        for line in file:
-            key,value = line.rstrip().split(':', maxsplit=1)
-            header[key] = value
-    return header
-
 #获取所有的script标签资源
 def get_script_link(url):
     links = []
-    header = load_header('header.txt')
+    header = util.load_header('header.txt')
     resp = requests.get(url)
     resp.encoding = 'utf-8'
     bsobj = BeautifulSoup(resp.text, 'html.parser')
@@ -30,25 +22,13 @@ def get_script_link(url):
             links.append(spt['src'])
     return links
 
-#保存对象到指定文件
-def save_obj(obj, fname):
-    import pickle
-    with open(fname, 'wb') as file:
-        pickle.dump(obj, file)
-
-#从指定文件读取数据
-def load_obj(fname):
-    import pickle
-    with open(fname, 'rb') as file:
-        return pickle.load(file)
-
 def query_word(string):
     string = 'http://hanyu.baidu.com/s?wd=%s&from=poem' % string
     urlcode = urllib.parse.quote(string, safe='?:/&=', encoding='utf-8')
     return urlcode
 
 def get_pronounce(word):
-    header = load_header(h_file)
+    header = util.load_header(h_file)
     query_url = query_word(word)
     resp = requests.get(query_url, headers=header)
     resp.encoding = 'utf-8'

@@ -4,6 +4,7 @@ import base64
 from PIL import Image
 import io
 import pickle
+import util
 # from bs4 import BeautifulSoup
 
 #保存cookies
@@ -43,17 +44,6 @@ def save_captcha(src_string):
     with open('captcha.gif', 'wb') as ofile:
         ofile.write(img)
 
-#通过header.txt载入用于设置request的header
-def load_header(filename):
-    header = {}
-    with open(filename) as file:
-        for line in file:
-            key,value = line.rstrip().split(':', maxsplit=1)
-            header[key] = value
-    return header
-
-
-
 if __name__ == '__main__':
 
     url = 'https://sso.toutiao.com/login/'
@@ -62,7 +52,7 @@ if __name__ == '__main__':
     #创建会话对象
     with requests.Session() as s:
         #装载请求头
-        s.headers = load_header(header_file)
+        s.headers = util.load_header(header_file)
         #访问登录页面，返回响应
         resp = s.get(url)
         #设置resp的编码格式为utf8

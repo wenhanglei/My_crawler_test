@@ -4,6 +4,7 @@ import requests
 from data import Data
 from bs4 import BeautifulSoup
 import pickle
+import util
 
 #是否打印记录的标志
 flag = 1
@@ -34,19 +35,9 @@ def download_data(bsobj, container):
         else:
             container.append(data)
 
-
-#通过header.txt载入用于设置request的header
-def load_header(filename):
-    header = {}
-    with open(filename) as file:
-        for line in file:
-            key,value = line.rstrip().split(':', maxsplit=1)
-            header[key] = value
-    return header
-
 def visite_next_link(url, contents):
     ##############获得页面内容，构造BeautifulSoup对象
-    headers = load_header(header_file)
+    headers = util.load_header(header_file)
     r = requests.get(url, headers=headers)
     bsobj = BeautifulSoup(r.text, 'html.parser')
     #获取并保存需要提取的数据
