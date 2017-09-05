@@ -12,7 +12,7 @@ h_file = 'header.txt'
 #获取所有的script标签资源
 def get_script_link(url):
     links = []
-    header = util.load_header('header.txt')
+    header = util.load_header('../header.txt')
     resp = requests.get(url)
     resp.encoding = 'utf-8'
     bsobj = BeautifulSoup(resp.text, 'html.parser')

@@ -7,7 +7,7 @@ import re
 #设定访问的入口网址:使用孔夫子旧书网做参考
 entry = 'http://www.kongfz.com/'
 #请求头文件设定
-file = 'header.txt'
+file = '../header.txt'
 #用于保存链接的set
 links = set()
 

@@ -8,7 +8,7 @@ import csv
 
 #需要爬取连接的导航网站的入口
 url = 'http://ilxdh.com'
-headers = load_header('header.txt')
+headers = load_header('../header.txt')
 
 #爬取网页获得响应
 resp = requests.get(url, headers=headers)

@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
     url = 'https://sso.toutiao.com/login/'
     action_url = 'https://sso.toutiao.com/login/auth/login'
-    header_file = 'header.txt'
+    header_file = '../header.txt'
     #创建会话对象
     with requests.Session() as s:
         #装载请求头

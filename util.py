@@ -20,8 +20,9 @@ def load_header(filename):
             header[key] = value
     return header
 
-#从txt文件加载cooki字典
+#从txt文件加载cookie字典
 def get_cookie_dic_from_file(filename):
+    "return dic"
     cookies = {}
     with open(filename) as file:
         cookie_text = file.read()

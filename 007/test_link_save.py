@@ -63,7 +63,7 @@ if __name__ == '__main__':
     # 访问的入口网址
     url = 'https://www.zhihu.com/collection/30688692'
     # 用于加载的请求头文件
-    header_file = 'header.txt'
+    header_file = '../header.txt'
     # 定义用于保存数据的list
     contents = []
 
