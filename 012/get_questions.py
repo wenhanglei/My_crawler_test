@@ -4,17 +4,55 @@
 import util
 import requests
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 
 #请求url
-req_url = 'https://www.zhihu.com/people/yu-tian-50-3/following/questions'
+req_url = 'https://www.zhihu.com/people/yu-tian-50-3/following/questions?page=59'
+
+def get_questions(result):
+    try:
+        #获取下一页按钮
+        btn = driver.find_element_by_class_name('PaginationButton-next')
+    except NoSuchElementException as exception:
+        # 构造bsobj
+        bsobj = BeautifulSoup(driver.page_source, 'html.parser')
+        # 获取包含item的容器
+        div = bsobj.find('div', id="Profile-following")
+        ques_div = div.find_all('div', class_="QuestionItem-title")
+        for ques in ques_div:
+            result.append(ques.string)
+        return result
+    else:
+        #构造bsobj
+        bsobj = BeautifulSoup(driver.page_source, 'html.parser')
+        #获取包含item的容器
+        div = bsobj.find('div', id="Profile-following")
+        ques_div = div.find_all('div', class_="QuestionItem-title")
+        for ques in ques_div:
+            result.append(ques.string)
+        #跳转到下一页
+        btn.send_keys(Keys.RETURN)
+        return get_questions(result)
 
 #加载cookies
-cookies = util.get_cookie_dic_from_file('cookie.txt')
+# cookies = util.get_cookie_dic_from_file('cookie.txt')
 # for key,value in cookies.items():
 #     print("%s : %s" % (key,value))
 #加载headers
-header = util.load_header('../header.txt')
+# header = util.load_header('../header.txt')
+#
+# #不使用session直接通过get获得响应
+# resp = requests.get(req_url, headers=header)
+# #构造BeautifulSoup
+# bsobj = BeautifulSoup(resp.text, 'html.parser')
+# #获取包含item的容器
+# div = bsobj.find('div', id="Profile-following")
+# ques_div = div.find_all('div', class_="List-item")
+# print(bsobj.prettify())
+# print(len(ques_div))
+
 #创建session访问
 # with requests.session() as s:
 #     s.headers = header
@@ -34,13 +72,27 @@ header = util.load_header('../header.txt')
 
 driver = webdriver.Chrome()
 driver.get(req_url)
+#获取结果集
+result = []
+btn = driver.find_element_by_class_name('PaginationButton-next')
 #构造bsobj
 bsobj = BeautifulSoup(driver.page_source, 'html.parser')
 #获取包含item的容器
 div = bsobj.find('div', id="Profile-following")
-ques_div = div.find_all('div', class_="List-item")
-print(bsobj.prettify())
-print(len(ques_div))
+ques_div = div.find_all('div', class_="QuestionItem-title")
+for ques in ques_div:
+    result.append(ques.string)
+#跳转到下一页
+btn.send_keys(Keys.RETURN)
+#构造bsobj
+bsobj = BeautifulSoup(driver.page_source, 'html.parser')
+#获取包含item的容器
+div = bsobj.find('div', id="Profile-following")
+ques_div = div.find_all('div', class_="QuestionItem-title")
+for ques in ques_div:
+    result.append(ques.string)
+for re in result:
+    print(re)
 driver.close()
 
 
