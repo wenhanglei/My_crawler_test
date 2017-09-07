@@ -49,11 +49,16 @@ def get_ques(result, wait):
             result.append(div.find_element_by_tag_name('a').text)
         return result
     else:
+        time.sleep(0.2)
         divs = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'QuestionItem-title')))
         for div in divs:
             result.append(div.find_element_by_tag_name('a').text)
         btn.send_keys(Keys.RETURN)
         return get_ques(result, wait)
+
+#自定义一个检查网页是否加载完全的wait条件
+
+
 
 #加载cookies
 # cookies = util.get_cookie_dic_from_file('cookie.txt')
