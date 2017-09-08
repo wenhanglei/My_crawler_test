@@ -29,7 +29,6 @@ def get_questions(result):
             result.append(ques.string)
         return result
     else:
-        time.sleep(0.5)
         # 构造bsobj
         bsobj = BeautifulSoup(driver.page_source, 'html.parser')
         div = bsobj.find('div', id='Profile-following')
@@ -49,15 +48,22 @@ def get_ques(result, wait):
             result.append(div.find_element_by_tag_name('a').text)
         return result
     else:
-        time.sleep(0.2)
-        divs = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'QuestionItem-title')))
+        divs = wait.until(load_all_elements('QuestionItem-title'))
         for div in divs:
             result.append(div.find_element_by_tag_name('a').text)
         btn.send_keys(Keys.RETURN)
         return get_ques(result, wait)
 
 #自定义一个检查网页是否加载完全的wait条件
-
+class load_all_elements(object):
+    def __init__(self, locater):
+        self.locater = locater
+    def __call__(self, driver):
+        elements = driver.find_elements_by_class_name(self.locater)
+        if len(elements) == 20:
+            return elements
+        else:
+            return false
 
 
 #加载cookies
