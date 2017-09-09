@@ -60,7 +60,7 @@ class load_all_elements(object):
         self.locater = locater
     def __call__(self, driver):
         elements = driver.find_elements_by_class_name(self.locater)
-        if len(elements) == 20:
+        if len(elements) >= 19:
             return elements
         else:
             return false
