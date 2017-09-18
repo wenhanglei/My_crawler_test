@@ -21,7 +21,7 @@ def recur_link(url, header, cookie):
     #构造BeautifulSoup对象
     bsobj = BeautifulSoup(resp.text, 'html.parser')
     # 获取包含数据的容器
-    ctan = bj.find('div', id='checkin')
+    ctan = bsobj.find('div', id='checkin')
     # 获得所有的文本
     texts = ctan.find_all('div', class_='note')
     for t in texts:
@@ -51,6 +51,6 @@ header = util.load_header('../header.txt')
 #获取cookies
 cookie = util.get_cookie_dic_from_file('cookie.txt')
 #使用cookies请求url
-resp = requests.get(entry, headers=header, cookies=cookie)
-#保存获得响应文件
-util.save_obj(resp.text, 'html')
+data = recur_link(entry, header=header, cookie=cookie)
+#保存提取的数据
+util.save_obj(data, 'data.pkl')
