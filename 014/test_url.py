@@ -4,25 +4,42 @@
 import pymysql
 import util
 from bs4 import BeautifulSoup
+import re
+import sqlutil
 
 #连接数据库获得连接对象
-# connection = pymysql.connect(host='localhost',
-#                              user='root',
-#                              password='712342',
-#                              db='test')
+connection = pymysql.connect(host='localhost',
+                             user='root',
+                             password='****',
+                             db='test',
+                             charset='utf8')
 # #获取光标对象
-# cursor = connection.cursor()
+cursor = connection.cursor()
 
 #获取保存的html
 html = util.load_obj('html')
 #创建BeautifulSoup对象
 bsobj = BeautifulSoup(html, 'html.parser')
 # 获取包含数据的容器
-ctan = bsobj.find('div', id='checkin')
-# 获得所有的文本
-texts = ctan.find_all('div', class_='note')
-#获得所有的时间数据
-time = ctan.find_all('div', class_='span4')
-#打印文本
-for text in time:
-    print(text.string.strip())
+ctans = bsobj.find_all('div', class_='span7 content')
+for num, ctan in enumerate(ctans):
+    text = ctan.find('div', class_='note').string.strip()
+    date = ctan.find('div', class_='span4').string.strip()
+    d_time = util.convert_timeformat(date)
+    print('保存第%s条记录：' % num)
+    #保存记录
+    sqlutil.insert(cursor, 'study', text, d_time)
+    print('保存成功！')
+#提交事务
+connection.commit()
+#关闭连接
+connection.close()
+
+# for s in sqlutil.select_table(cursor, 'study'):
+#     print(s)
+
+
+
+
+
+

@@ -2,6 +2,22 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
+
+#将扇贝的时间格式转化成mysql的时间格式
+def convert_timeformat(date):
+    regex = re.compile(r'(\w*)月 (\d*), (\d*)')
+    m = regex.match(date)
+    month = convert_num(m.group(1))
+    day = m.group(2)
+    year = m.group(3)
+    return ('%s-%s-%s' % (year, str(month), day))
+
+#中文数字转化为罗马数字
+def convert_num(c):
+    arr = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
+    if c in arr:
+        return arr.index(c)+1
 
 #通过list获得cookies的dic
 def get_cookie_dic_from_co_li(co_li):
