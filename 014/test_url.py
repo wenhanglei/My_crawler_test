@@ -10,7 +10,7 @@ import sqlutil
 #连接数据库获得连接对象
 connection = pymysql.connect(host='localhost',
                              user='root',
-                             password='****',
+                             password='712342',
                              db='test',
                              charset='utf8')
 # #获取光标对象
@@ -30,9 +30,10 @@ for num, ctan in enumerate(ctans):
     #保存记录
     sqlutil.insert(cursor, 'study', text, d_time)
     print('保存成功！')
-#提交事务
-connection.commit()
-#关闭连接
+    if(num == 5):
+        connection.commit()
+    if(num == 8):
+        raise Exception("中断")
 connection.close()
 
 # for s in sqlutil.select_table(cursor, 'study'):

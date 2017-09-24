@@ -4,6 +4,25 @@
 import os
 import re
 
+#控制台打印进度条
+def print_progress(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█'):
+    """
+    call in a loop to create a progressbar:
+    :param iteration:  current iteration(int)
+    :param total:      total iteration(int)
+    :param prefix:     prefix string(str)
+    :param suffix:      suffix string(str)
+    :param decimals:   positive number precision
+    :param length:     character length for bar
+    :param fill:       bar fill character
+    :return: 
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100*(iteration/float(total)))
+    fill_length = int(length*iteration//total)
+    bar = fill*fill_length + '-'*(length-fill_length)
+    print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end='')
+
+
 #将扇贝的时间格式转化成mysql的时间格式
 def convert_timeformat(date):
     regex = re.compile(r'(\w*)月 (\d*), (\d*)')
