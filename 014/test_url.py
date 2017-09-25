@@ -10,7 +10,7 @@ import sqlutil
 #连接数据库获得连接对象
 connection = pymysql.connect(host='localhost',
                              user='root',
-                             password='712342',
+                             password='****',
                              db='test',
                              charset='utf8')
 # #获取光标对象
