@@ -3,6 +3,9 @@
 
 import util
 import pymysql
+import requests
+import sqlutil
+from bs4 import BeautifulSoup
 
 class PageNummberWrong(Exception):
     def __init__(self):
@@ -22,6 +25,7 @@ class ShanbayCrawer:
         self.header = util.load_header('../header.txt')
         #用于访问目标的cookies
         self.cookies = util.get_cookie_dic_from_file('cookie.txt')
+        self.cursor = connection.cursor()
 
     def save_study_data(self, first, last):
         """
@@ -32,7 +36,27 @@ class ShanbayCrawer:
         """
         #遍历输入页面
         if first >= 0 and last >= first:
-            pass
+            util.print_progress(0, 10*(last-first+1),'download', 'complete',length=40)
+            for num in range(first, last+1):
+                url_tail = '' if first == 0 else '?page=' + str(num)
+                #访问地址
+                url = self.entry + url_tail
+                #获取响应
+                resp = requests.get(url, headers=self.header, cookies=self.cookies)
+                # 创建BeautifulSoup对象
+                bsobj = BeautifulSoup(resp.text, 'html.parser')
+                # 获取包含数据的容器
+                ctans = bsobj.find_all('div', class_='span7 content')
+                for n, ctan in enumerate(ctans):
+                    text = ctan.find('div', class_='note').string.strip()
+                    date = ctan.find('div', class_='span4').string.strip()
+                    d_time = util.convert_timeformat(date)
+                    # 保存记录
+                    sqlutil.insert(self.cursor, 'study', text, d_time)
+                    #显示进度
+                    util.print_progress((num-first)*10+n+1, 10*(last-first+1), 'download', 'complete', length=40)
+                self.connection.commit()
+            self.connection.close()
         else:
             raise PageNummberWrong()
 
@@ -43,8 +67,8 @@ class ShanbayCrawer:
 if __name__ == '__main__':
     connection = pymysql.connect(host='localhost',
                                  user='root',
-                                 password='****',
+                                 password='*****',
                                  db='test',
                                  charset='utf8')
-    ShanbayCrawer(connection).test()
+    ShanbayCrawer(connection).save_study_data(21, 87)
 
