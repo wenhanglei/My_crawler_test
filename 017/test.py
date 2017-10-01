@@ -6,12 +6,12 @@ import util
 import requests
 from bs4 import BeautifulSoup
 
-url = 'https://www.zhihu.com/question/56838287/answer/152755557'
+url = 'https://www.zhihu.com/question/61046076/answer/185135407'
 header = util.load_header('../header.txt')
 resp = requests.get(url, headers = header)
 
 bsobj = BeautifulSoup(resp.text, 'html.parser')
-div = bsobj.find('div', class_='RichContent')
+div = bsobj.find('span', class_='RichText')
 
 with open('download.html', 'w') as f:
     f.write(str(div))

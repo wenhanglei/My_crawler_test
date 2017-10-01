@@ -3,6 +3,8 @@
 
 import os
 import re
+import requests
+import shutil
 
 #控制台打印进度条
 def print_progress(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█'):
@@ -80,3 +82,18 @@ def load_obj(fname):
     with open(fname, 'rb') as file:
         return pickle.load(file)
 
+#保存html文件
+def save_html(fname, html):
+    with open(fname, 'w') as file:
+        file.write(html)
+
+#根据url获取图片
+def get_img(url, img_path):
+    if not os.path.exists(img_path):
+        os.mkdir(img_path)
+    basename = os.path.basename(url)
+    file_path = os.path.join(img_path, basename)
+    r = requests.get(url, stream=True)
+    if not os.path.exists(file_path):
+        with open(file_path, 'wb') as img:
+            shutil.copyfileobj(r.raw, img)
