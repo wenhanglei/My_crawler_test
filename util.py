@@ -87,7 +87,7 @@ def save_html(fname, html):
     with open(fname, 'w') as file:
         file.write(html)
 
-#根据url获取图片
+#根据url保存网络图片到本地并返回图片地址
 def get_img(url, img_path):
     if not os.path.exists(img_path):
         os.mkdir(img_path)
@@ -97,3 +97,4 @@ def get_img(url, img_path):
     if not os.path.exists(file_path):
         with open(file_path, 'wb') as img:
             shutil.copyfileobj(r.raw, img)
+    return file_path

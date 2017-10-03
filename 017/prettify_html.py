@@ -14,10 +14,25 @@ with open(infi, 'r') as f:
     del bsobj.span['class']
     del bsobj.span['itemprop']
 
-for c in bsobj.descendants:
-    if c.name == 'noscript':
-        print(c)
+ncts = bsobj.find_all('noscript')
 
+for n in ncts:
+    n.decompose()
+
+imgs = bsobj.find_all('img')
+
+for i in imgs:
+    #如果img包含src属性
+    if 'data-actualsrc' in i.attrs:
+        img_url = i['data-actualsrc']
+        for a in list(i.attrs):
+            del i[a]
+        i['src'] = util.get_img(img_url, 'images')
+
+
+
+#保存新生成的html
+util.save_html('test.html', str(bsobj))
 
 
 
