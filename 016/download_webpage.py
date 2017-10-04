@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import re
+import itertools
 from urllib.error import URLError
 from urllib.request import urlopen
 from urllib.request import Request
+
 
 #下载指定url的网页
 def download(url, user_agent='cute_spider', num_retries=2):
