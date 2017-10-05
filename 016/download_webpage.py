@@ -7,6 +7,23 @@ from urllib.error import URLError
 from urllib.request import urlopen
 from urllib.request import Request
 
+def link_crawler(seed_url, link_regex):
+    """从给定的url爬取匹配正则表达式的所有连接"""
+    crawl_queue = [seed_url]
+    while crawl_queue:
+        url = crawl_queue.pop()
+        html = crawl_queue.pop()
+        html = download(url)
+        #过滤匹配正则表达式的连接
+        for link in get_links(html):
+            if re.match(link_regex, link):
+                crawl_queue.append(link)
+
+def get_link(html):
+    """返回连接list"""
+    #提取所有链接的正则表达式
+    webpage_regex = re.compile('<a[^>]+href=["\'](.*?)["\']', re.IGNORECASE)
+    return webpage_regex.findall(html)
 
 #下载指定url的网页
 def download(url, user_agent='cute_spider', num_retries=2):
