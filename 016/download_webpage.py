@@ -10,14 +10,18 @@ from urllib.request import Request
 def link_crawler(seed_url, link_regex):
     """从给定的url爬取匹配正则表达式的所有连接"""
     crawl_queue = [seed_url]
+    #记录访问过的url
+    seen = set(crawl_queue)
     while crawl_queue:
         url = crawl_queue.pop()
-        html = crawl_queue.pop()
         html = download(url)
         #过滤匹配正则表达式的连接
         for link in get_links(html):
             if re.match(link_regex, link):
-                crawl_queue.append(link)
+                link = urlparse.urljoin(seed_url, link)
+                if link not in seen:
+                    seen.append(link)
+                    crawl_queue.append(link)
 
 def get_link(html):
     """返回连接list"""
