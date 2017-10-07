@@ -98,3 +98,48 @@ def get_img(url, img_path):
         with open(file_path, 'wb') as img:
             shutil.copyfileobj(r.raw, img)
     return file_path
+
+class Throttle:
+    """添加一个下载间隔"""
+    def __init__(self, delay):
+        #下载间隔
+        self.delay = delay
+        #最后访问的域名的时间戳
+        self.domains = {}
+
+    def wait(self, url):
+        domain = urlparse.urlparse(url).netloc
+        last_accessed = self.domains.get(domain)
+
+        if self.delay > 0 and last_accessed is not None:
+            sleep_sess = self.delay - (datetime.datetime.now() -
+                last_accessed).seconds
+            if sleep_secs > 0:
+                time.sleep(sleep_secs)
+            self.domains[domain] = datetime.datetime.now()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
